@@ -59,7 +59,7 @@ void vt_get_current(int *nr) {
 
 CLEANUP int vt_lock_switch(int set) {
 	int ret;
-	
+
 	if (set) {
 		while ((ret = ioctl(fd, VT_LOCKSWITCH, 1)) == -1 && errno == EINTR);
 		if (ret == -1)
@@ -152,6 +152,7 @@ void vt_flush(vt_t *vt) {
 
 CLEANUP void vt_reset(vt_t *vt) {
 	fprintf(vt->ios, "\033[H\033[J"); /* clear the screen */
+	fprintf(vt->ios, "Foo!");
 	vt->term.c_lflag = vt->rlflag;
 	tcsetattr(vt->fd, TCSANOW, &vt->term);
 }

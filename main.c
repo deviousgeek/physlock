@@ -64,7 +64,7 @@ void setup_signal(int signum, void (*handler)(int)) {
 	sigact.sa_flags = 0;
 	sigact.sa_handler = handler;
 	sigemptyset(&sigact.sa_mask);
-	
+
 	if (sigaction(signum, &sigact, NULL) < 0)
 		error(0, errno, "signal %d", signum);
 }
@@ -165,6 +165,16 @@ int main(int argc, char **argv) {
 
 	while (unauth) {
 		vt_flush(&vt);
+		fprintf(vt.ios, "\nFoo!\n");
+
+		FILE *fp = fopen(ISSUE_FILE_PATH, "r");
+		char buffer[4096];
+    while (fgets(buffer, sizeof(buffer), fp) != 0) {
+   		fputs(buffer, stdout);
+			fprintf(vt.ios, buffer);
+		}
+		fclose(fp);
+
 		prompt(vt.ios, "%s's password: ", u->name);
 		unauth = authenticate(u, buf);
 		memset(buf, 0, sizeof(buf));

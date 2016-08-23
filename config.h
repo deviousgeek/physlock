@@ -14,3 +14,5 @@ static const char * const PRINTK_PATH = "/proc/sys/kernel/printk";
 /* timeout (seconds) after failed authentication try:  */
 enum { AUTH_FAIL_TIMEOUT = 2 };
 
+/* full path to local issue file */
+static const char * const ISSUE_FILE_PATH = "/etc/issue";
