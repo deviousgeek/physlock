@@ -164,12 +164,9 @@ int main(int argc, char **argv) {
 	openlog(progname, LOG_PID, LOG_AUTH);
 
 	while (unauth) {
-		vt_flush(&vt);
-		fprintf(vt.ios, "\nFoo!\n");
-
 		FILE *fp = fopen(ISSUE_FILE_PATH, "r");
 		char buffer[4096];
-    while (fgets(buffer, sizeof(buffer), fp) != 0) {
+		    while (fgets(buffer, sizeof(buffer), fp) != 0) {
    		fputs(buffer, stdout);
 			fprintf(vt.ios, buffer);
 		}
