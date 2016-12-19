@@ -30,6 +30,7 @@
 #include "options.h"
 #include "util.h"
 #include "vt.h"
+#include "issue.h"
 
 static char buf[1024];
 static int oldvt;
@@ -163,28 +164,23 @@ int main(int argc, char **argv) {
 
 	openlog(progname, LOG_PID, LOG_AUTH);
 
-	while (unauth) {
-		FILE *fp = fopen(ISSUE_FILE_PATH, "r");
-		char buffer[4096];
-		    while (fgets(buffer, sizeof(buffer), fp) != 0) {
-   		fputs(buffer, stdout);
-			fprintf(vt.ios, buffer);
-		}
-		fclose(fp);
+    while (unauth) {
+        if (!options->disable_issue)
+            print_issue_file(vt, oldvt);
 
-		prompt(vt.ios, "%s's password: ", u->name);
-		unauth = authenticate(u, buf);
-		memset(buf, 0, sizeof(buf));
-		if (unauth) {
-			if (!user_only && (u == &root || ++try == 3)) {
-				u = u == &root ? &user : &root;
-				try = 0;
-			}
-			fprintf(vt.ios, "\nAuthentication failed\n\n");
-			syslog(LOG_WARNING, "Authentication failure");
-			sleep(AUTH_FAIL_TIMEOUT);
-		}
-	}
+        prompt(vt.ios, "%s's password: ", u->name);
+        unauth = authenticate(u, buf);
+        memset(buf, 0, sizeof(buf));
+        if (unauth) {
+            if (!user_only && (u == &root || ++try == 3)) {
+                u = u == &root ? &user : &root;
+                try = 0;
+            }
+            fprintf(vt.ios, "\nAuthentication failed\n\n");
+            syslog(LOG_WARNING, "Authentication failure");
+            sleep(AUTH_FAIL_TIMEOUT);
+        }
+    }
 
 	return 0;
 }

@@ -5,11 +5,11 @@ PREFIX   := /usr/local
 CFLAGS   += -Wall -pedantic
 CPPFLAGS += -DVERSION=\"$(VERSION)\" -D_XOPEN_SOURCE=500
 LDFLAGS  +=
-LIBS     := -lcrypt
+LIBS     := -lcrypt -lutil
 
 .PHONY: clean install uninstall
 
-SRC := auth.c main.c options.c util.c vt.c
+SRC := auth.c main.c options.c util.c vt.c issue.c
 DEP := $(SRC:.c=.d)
 OBJ := $(SRC:.c=.o)
 
