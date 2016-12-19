@@ -152,7 +152,6 @@ void vt_flush(vt_t *vt) {
 
 CLEANUP void vt_reset(vt_t *vt) {
 	fprintf(vt->ios, "\033[H\033[J"); /* clear the screen */
-	fprintf(vt->ios, "Foo!");
 	vt->term.c_lflag = vt->rlflag;
 	tcsetattr(vt->fd, TCSANOW, &vt->term);
 }
